@@ -18,7 +18,7 @@ class PostController extends Controller
     public function index()
     {
         return response()->json([
-            'data' => Post::get()->toArray()
+            'data' => Post::select('id','title','content')->get()->toArray()
         ]);
     }
 
@@ -46,7 +46,7 @@ class PostController extends Controller
             'content' => $data['content']
         ]);
         return response()->json([
-            'data' => Post::get()->toArray()
+            'data' => Post::select('id','title','content')->get()->toArray()
         ]);
     }
 
@@ -87,7 +87,7 @@ class PostController extends Controller
         $post->content = $data['content'];
         $post->save();
         return response()->json([
-            'data' => Post::get()->toArray()
+            'data' => Post::select('id','title','content')->get()->toArray()
         ]);
     }
 

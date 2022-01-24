@@ -76,18 +76,15 @@ class PostControllerTest extends TestCase
      */
     protected function getDataStoreFail()
     {
-        $post = $this->posts->random();
         $dataStoreFail = [
             'title' => $this->faker->randomElement([
                 null,
                 $this->faker->numberBetween(1, 10),
-                $this->faker->regexify('[A-Za-z0-9]{51}'),
-                $post->title,
+                $this->faker->regexify('[A-Za-z0-9]{51}')
             ]),
             'content' => $this->faker->randomElement([
                 null,
-                $this->faker->regexify('[A-Za-z0-9]{256}'),
-                $post->content
+                $this->faker->regexify('[A-Za-z0-9]{256}')
             ]),
         ];
         return $dataStoreFail;
@@ -109,18 +106,15 @@ class PostControllerTest extends TestCase
 
     protected function getDataUpdateFail()
     {
-        $post = $this->posts[0];
         $dataUpdateFail = [
             'title' => $this->faker->randomElement([
                 null,
                 $this->faker->numberBetween(1, 10),
-                $this->faker->regexify('[A-Za-z0-9]{51}'),
-                $post->title,
+                $this->faker->regexify('[A-Za-z0-9]{51}')
             ]),
             'content' => $this->faker->randomElement([
                 null,
-                $this->faker->regexify('[A-Za-z0-9]{256}'),
-                $post->content
+                $this->faker->regexify('[A-Za-z0-9]{256}')
             ]),
         ];
 
@@ -184,7 +178,9 @@ class PostControllerTest extends TestCase
 
         if ($statusCode === 200) {
             $response->assertJsonStructure([
-                '*' => $this->getPostStructure(),
+                'data' => [
+                  '*' => $this->getPostStructure()
+                ]
             ]);
         }
     }
@@ -201,7 +197,11 @@ class PostControllerTest extends TestCase
         // Check xem đã store thành công chưa
         if ($statusCode === 200) {
             $this->assertDatabaseHas($this->tableName, $data);
-            $response->assertJsonStructure($this->getPostStructure());
+            $response->assertJsonStructure([
+                'data' => [
+                  '*' => $this->getPostStructure()
+                ]
+            ]);
         }
 
         return $response;
@@ -219,7 +219,11 @@ class PostControllerTest extends TestCase
         // Check xem đã update thành công chưa
         if ($statusCode === 200) {
             $this->assertDatabaseHas($this->tableName, $data);
-            $response->assertJsonStructure($this->getPostStructure());
+            $response->assertJsonStructure([
+                'data' => [
+                  '*' => $this->getPostStructure()
+                ]
+            ]);
         }
 
         return $response;
@@ -275,7 +279,7 @@ class PostControllerTest extends TestCase
      */ 
     public function testUpdateSuccess()
     {
-        $post = $this->posts[1];
+        $post = $this->posts->get()[1];
         $data = $this->getDataUpdateSuccess($post);
 
         $this->sendUpdateRequest($post->id, $data);
@@ -287,7 +291,7 @@ class PostControllerTest extends TestCase
      */ 
     public function testUpdateFailByValidation()
     {
-        $post = $this->posts[1];
+        $post = $this->posts->get()[1];
         $data = $this->getDataUpdateFail();
 
         $this->sendUpdateRequest($post->id, $data, 422);
@@ -300,7 +304,7 @@ class PostControllerTest extends TestCase
     public function testDeleteSuccess()
     {
         $this->fakePostData();
-        $post = $this->faker->randomElement($this->posts);
+        $post = $this->faker->randomElement($this->posts->get());
         $this->sendDeleteRequest($post->id);
     }
 
