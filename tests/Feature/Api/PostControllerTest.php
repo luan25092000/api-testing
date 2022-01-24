@@ -159,7 +159,7 @@ class PostControllerTest extends TestCase
     protected function apiUpdate($postId, $data)
     {
         return $this->json(
-            'PUT',
+            'POST',
             "{$this->baseUrl}/api/posts/id/{$postId}",
             $data
         );

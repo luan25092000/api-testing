@@ -20,9 +20,7 @@ Route::group(['namespace' => 'Api'], function() {
 
     Route::post('/post','PostController@store');
     
-    Route::get('/posts/id/{id}','PostController@show');
-    
-    Route::put('/posts/id/{id}','PostController@update');
+    Route::post('/posts/id/{id}','PostController@update');
     
     Route::delete('/posts/id/{id}','PostController@destroy');
 });
